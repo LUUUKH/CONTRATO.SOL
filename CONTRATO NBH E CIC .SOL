@@ -1,0 +1,26 @@
+# CONTRATO.SOL// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract PropriedadeIntelectual {
+    address public autor;
+    mapping(string => bool) public direitosAutorais;
+
+    constructor() {
+        autor = msg.sender;
+    }
+
+    modifier apenasAutor() {
+        require(msg.sender == autor, "Apenas o autor pode executar esta ação.");
+        _;
+    }
+
+    function registrarDireitosAutorais(string[] memory produtos) public apenasAutor {
+        for (uint i = 0; i < produtos.length; i++) {
+            direitosAutorais[produtos[i]] = true;
+        }
+    }
+
+    function verificarDireitosAutorais(string memory produto) public view returns (bool) {
+        return direitosAutorais[produto];
+    }
+}
